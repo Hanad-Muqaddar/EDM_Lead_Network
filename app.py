@@ -1,12 +1,13 @@
 import streamlit as st
 import requests
 from datetime import datetime
+import json
 
 # ---------------------------
 # Streamlit Page Config
 # ---------------------------
-st.set_page_config(page_title="EDM Lead Network Ping", page_icon="📞", layout="centered")
-st.title("📞 EDM Lead Network Ping API Tester")
+st.set_page_config(page_title="ITConverts Network Ping", page_icon="📞", layout="centered")
+st.title("📞 ITConverts Network Ping")
 
 # ---------------------------
 # Fixed Credentials
@@ -33,14 +34,6 @@ with col2:
     city = st.text_input("City", "")
     zip_code = st.text_input("Zip Code", "")
 
-st.header("🧾 Optional Details")
-
-col3, col4 = st.columns(2)
-with col3:
-    dob = st.date_input("Date of Birth", value=None)
-with col4:
-    gender = st.selectbox("Gender", ["", "Male", "Female"])
-
 # ---------------------------
 # Submit Button
 # ---------------------------
@@ -49,26 +42,22 @@ if st.button("🚀 Send Ping"):
                 address, city, state, zip_code]):
         st.error("⚠️ Please fill in all required fields.")
     else:
-        payload = {
-            "lp_campaign_id": LP_CAMPAIGN_ID,
-            "lp_campaign_key": LP_CAMPAIGN_KEY,
-            "caller_id": CALLER_ID,
-            "first_name": first_name,
-            "last_name": last_name,
-            "phone_number": phone_number,
-            "email_address": email_address,
-            "address": address,
-            "city": city,
-            "state": state,
-            "zip_code": zip_code
-        }
-
+        payload = json.dumps({
+                "first_name": first_name,
+                "last_name": last_name,
+                "phone_number": phone_number,
+                "email_address": email_address,
+                "address": address,
+                "city": city,
+                "state": state,
+                "zip_code": zip_code
+                })
         # ---------------------------
         # Make API Request
         # ---------------------------
         try:
             response = requests.post(
-                "https://track.edmleadnetwork.com/call-preping.do",
+                "https://track.edmleadnetwork.com/call-preping.do?lp_campaign_id=689fc15a83cdd&lp_campaign_key=WmDKJVdyvNzHrZjwpkFx&caller_id=+18545672120",
                 data=payload,
                 timeout=10
             )
